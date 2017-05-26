@@ -1,0 +1,33 @@
+Brief - Version control, showing features added/removed/changed in each version.
+Author - Jack Matters
+
+Version - 01
+Date - 20/05/2017
+Brief - Very late start... Started with JavelinThrowScript to get all data read in from files and placed into data
+	structures. Also got a word to be chosen at random from the data structure, and comparison of each letter
+	in a word to user input. Once word has been typed out by user, new word is randomly chosen. Tested within
+	Unity scene and it works fine. Just need to display current word and current word progress to screen for
+	player to type out, then I'll go from there.
+
+Version - 02
+Date - 21/05/2017
+Brief - Altered JavelineThrowScript to display the current word thats needs to be typed to the screen. Each letter
+	is either blue (has been typed), green (next to be typed), or black (coming up). Also put a timer in top
+	left of screen. After 15 seconds, the words will switch from 4-5 letters to 6-7 letters (this represents
+	the changing of event state). The first 15 seconds will be the running phase, the next 15 seconds will be
+	the throwing phase, and after that will be (hopefully) animation and then the ending screen showing stats.
+	Tested this and all works fine. I also created images to be used as sprites. So far I have created flags
+	for 50 yards/meters? - 500 yards/meters? (with an interval of 50) for a total of 10 flags. I also created a
+	simple (extremely simple) running pitch. Just need to find a grass image, and a background image to be used.
+	Next thing I plan to do is add in a running speed variable that increases with each word typed and decreases
+	with each incorrect character, and similarly one for the throw power. I also plan to create 'the field'
+	(place all flag distance markers, run track, background, grass, etc).
+
+Version - 03
+Date - 24/05/2017
+Brief - Altered JavelinThrowScript to display a pause screen between different event states. These pause screen inform
+	the player of how to complete the next section. I also sompleted the game layout with the flag markers placed
+	and the grass and running track placed, as well as the background. Next thing I'll work on is adding a spear 
+	that is thrown depending on run speed and throw power. I will have it so max run speed and throw power will
+	hit the 500m/yard mark, minimal for both will throw 1m/yard, and any other combination will land somewhere 
+	in-between. I plan to weigh more on throw power, as it contains longer words to be typed out.
