@@ -26,7 +26,7 @@ Brief - Altered JavelineThrowScript to display the current word thats needs to b
 Version - 03
 Date - 24/05/2017
 Brief - Altered JavelinThrowScript to display a pause screen between different event states. These pause screen inform
-	the player of how to complete the next section. I also sompleted the game layout with the flag markers placed
+	the player of how to complete the next section. I also completed the game layout with the flag markers placed
 	and the grass and running track placed, as well as the background. Next thing I'll work on is adding a spear 
 	that is thrown depending on run speed and throw power. I will have it so max run speed and throw power will
 	hit the 500m/yard mark, minimal for both will throw 1m/yard, and any other combination will land somewhere 

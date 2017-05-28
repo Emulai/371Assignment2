@@ -15,6 +15,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class JavelinThrowScript : MonoBehaviour {
 
@@ -37,6 +38,16 @@ public class JavelinThrowScript : MonoBehaviour {
     private GUIStyle completedLetterStyle;
     private GUIStyle timeStyle;
     private GUIStyle infoStyle;
+    private GUIStyle barBackStyle;
+    private GUIStyle barBackStyleTwo;
+    private GUIStyle barFrontStyle;
+    public GameObject javelin;
+
+    // GUI style backgrounds
+    public Texture2D infoStyleBackground;
+    public Texture2D barBackgroundOne;
+    public Texture2D barBackgroundTwo;
+    public Texture2D barBackgroundThree;
 
     // Time variables
     private int timeStart;
@@ -44,6 +55,15 @@ public class JavelinThrowScript : MonoBehaviour {
 
     // Variable for pausing of game between event states
     private bool pause;
+
+    // Variables for collected data
+    private int runSpeed;
+    private int throwPower;
+    private int runSpeedErrors;
+    private int runSpeedComplete;
+    private int throwPowerErrors;
+    private int throwPowerComplete;
+    public float distanceTotal;
 
 	// Initialize Javelin Throw event
 	void Start () 
@@ -53,6 +73,16 @@ public class JavelinThrowScript : MonoBehaviour {
         throwPowerArray = new ArrayList();
         currentWord = "";
         currentWordPos = 0;
+
+        // Initialise values
+        runSpeed = 0;
+        throwPower = 0;
+        runSpeedErrors = 0;
+        runSpeedComplete = 0;
+        throwPowerErrors = 0;
+        throwPowerComplete = 0;
+        javelin = GameObject.FindWithTag("javelin");
+        //javelin.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
 
         // Set data file names
         string fourFiveLetterWords = "Assets/Resources/DataFiles/FourFiveLetterWords.txt";
@@ -73,7 +103,7 @@ public class JavelinThrowScript : MonoBehaviour {
         timeNow = (int)Time.time;
 
         // Initialize pause to true
-        pause = true;
+        pause = true; ;
 	}
 	
 
@@ -89,16 +119,12 @@ public class JavelinThrowScript : MonoBehaviour {
             {
                 // Change event state every 15 seconds (15 seconds for running/throwing, then ending screen), displaying a pause screen between states
                 if (!pause)
-                {
                     pause = true;
-                    //else 
-                    //timeStart = (int)Time.time;
-                }
 
                 if (eventState == "running")
                     eventState = "throwing";
                 else if (eventState == "throwing")
-                    eventState = "finished";
+                    eventState = "finishedOne";
             }
 
             // Running state of the event (4 and 5 letter words)
@@ -136,13 +162,24 @@ public class JavelinThrowScript : MonoBehaviour {
                                 currentWordCharArray = currentWord.ToCharArray();
                                 currentWordLetter = currentWordCharArray[0];
 
-                                // Increase in value for whatever for completing word
+                                // Increase run speed by 10, and increment words completed
+                                runSpeed += 10;
+                                runSpeedComplete++;
+
+                                // Ensure run speed doesn't exceed 100
+                                if (runSpeed > 100)
+                                    runSpeed = 100;
                             }
                         }
                         else
                         {
+                            // Decrease run speed by 1 and increment errors
+                            runSpeed--;
+                            runSpeedErrors++;
 
-                            // Decrease in value for whatever for incorrect key input
+                            // Ensure run speed doesn't fall below 0
+                            if (runSpeed < 0)
+                                runSpeed = 0;
                         }
                     }
                 }
@@ -182,14 +219,24 @@ public class JavelinThrowScript : MonoBehaviour {
                                 currentWordCharArray = currentWord.ToCharArray();
                                 currentWordLetter = currentWordCharArray[0];
 
-                                // Increase in value for whatever for completing word
+                                // Increase throw power by 10, and increment words completed
+                                throwPower += 10;
+                                throwPowerComplete++;
+
+                                // Ensure run speed doesn't exceed 100
+                                if (throwPower > 100)
+                                    throwPower = 100;
                             }
                         }
                         else
                         {
-                            Debug.Log("Incorrect Key Pressed");
+                            // Decrease throw power by 1 and increment errors
+                            throwPower--;
+                            throwPowerErrors++;
 
-                            // Decrease in value for whatever for incorrect key input
+                            // Ensure throw power doesn't fall below 0
+                            if (throwPower < 0)
+                                throwPower = 0;
                         }
                     }
                 }
@@ -202,13 +249,30 @@ public class JavelinThrowScript : MonoBehaviour {
         }
         else if (Input.GetKeyDown(KeyCode.Space))
         {
-            // Unpause when space bar is pressed and reset time
-            pause = false;
-            timeStart = (int)Time.time;
-            timeNow = (int)Time.time;
+            // Change ending screen on each press of space bar
+            if (eventState == "finishedOne")
+                eventState = "finishedTwo";
+            else if (eventState == "finishedTwo")
+                eventState = "finishedThree";
+            else if (eventState == "finishedThree")
+                EndEvent();
+            else
+            {
+                // Unpause and reset time
+                pause = false;
+                timeStart = (int)Time.time;
+                timeNow = (int)Time.time;
+            }
         }
 	}
+    
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("test");
 
+        if (collision.gameObject.tag == "javelin")
+            Debug.Log("fjdnf");
+    }
 
     // Set the different GUI style properties
     private void SetStyleGUI()
@@ -218,6 +282,9 @@ public class JavelinThrowScript : MonoBehaviour {
         completedLetterStyle = new GUIStyle();
         timeStyle = new GUIStyle();
         infoStyle = new GUIStyle();
+        barBackStyle = new GUIStyle();
+        barBackStyleTwo = new GUIStyle();
+        barFrontStyle = new GUIStyle();
 
         // Position text to centre of box
         style.alignment = TextAnchor.MiddleCenter;
@@ -225,19 +292,33 @@ public class JavelinThrowScript : MonoBehaviour {
         completedLetterStyle.alignment = TextAnchor.MiddleCenter;
         infoStyle.alignment = TextAnchor.MiddleCenter;
         infoStyle.wordWrap = true;
+        barBackStyle.alignment = TextAnchor.MiddleCenter;
+        barFrontStyle.alignment = TextAnchor.MiddleCenter;
 
         // Set different style colours
         currentLetterStyle.normal.textColor = Color.green;
         completedLetterStyle.normal.textColor = Color.blue;
 
         // Set different style text sizes
-        style.fontSize = 64;
-        currentLetterStyle.fontSize = 64;
-        completedLetterStyle.fontSize = 64;
+        style.fontSize = 72;
+        currentLetterStyle.fontSize = 72;
+        completedLetterStyle.fontSize = 72;
         timeStyle.fontSize = 24;
         infoStyle.fontSize = 32;
-    }
+        barFrontStyle.fontSize = 24;
 
+        // Set different style text styles
+        style.fontStyle = FontStyle.Bold;
+        currentLetterStyle.fontStyle = FontStyle.Bold;
+        completedLetterStyle.fontStyle = FontStyle.Bold;
+        timeStyle.fontStyle = FontStyle.Bold;
+
+        // Set different style backgrounds
+        infoStyle.normal.background = infoStyleBackground;
+        barBackStyle.normal.background = barBackgroundOne;
+        barBackStyleTwo.normal.background = barBackgroundTwo;
+        barFrontStyle.normal.background = barBackgroundThree;
+    }
 
     // Display GUI
     void OnGUI()
@@ -273,26 +354,57 @@ public class JavelinThrowScript : MonoBehaviour {
         }
         else
         { 
-            // Display pause screen info
+            // Display pause screen info, depending on the current screen
             if (eventState == "running")
             {
-                string temp = "testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing";
-                GUI.Box(new Rect(Screen.width/4, 0, Screen.width/2, Screen.height), temp, infoStyle);
+                string temp = "You have 15 seconds to type out as many 4-5 letter words as you can to build up your running speed. Incorrect characters will decrease speed. \n\n Press Space to begin";
+                GUI.Box(new Rect(Screen.width/4, Screen.height * 0.2f, Screen.width/2, Screen.height * 0.6f), temp, infoStyle);
             }
             else if (eventState == "throwing")
             {
-                string temp = "";
+                string temp = "You have 15 seconds to type out as many 6-7 letter words as you can to build up throw power. Incorrect characters will decrease power. \n\n Press Space to begin";
+                GUI.Box(new Rect(Screen.width / 4, Screen.height * 0.2f, Screen.width / 2, Screen.height * 0.6f), temp, infoStyle);
             }
-            else if (eventState == "finished")
+            else if (eventState == "finishedOne")
             {
-                string temp = "";
+                string temp = "Run Phase \n Run Speed: " + runSpeed + "\n Words Completed: " + runSpeedComplete + "\n Errors Made: " + runSpeedErrors + "\n\n Space to continue";
+                GUI.Box(new Rect(Screen.width / 4, Screen.height * 0.2f, Screen.width / 2, Screen.height * 0.6f), temp, infoStyle);
+            }
+            else if (eventState == "finishedTwo")
+            {
+                string temp = "Throw Phase \n Throw Power: " + throwPower + "\n Words Completed: " + throwPowerComplete + "\n Errors Made: " + throwPowerErrors + "\n\n Space to continue";
+                GUI.Box(new Rect(Screen.width / 4, Screen.height * 0.2f, Screen.width / 2, Screen.height * 0.6f), temp, infoStyle);
+            }
+            else if (eventState == "finishedThree")
+            {
+                string temp = "Distance Thrown: " + distanceTotal + "\n\n Space to end event";
+                GUI.Box(new Rect(Screen.width / 4, Screen.height * 0.2f, Screen.width / 2, Screen.height * 0.6f), temp, infoStyle);
             }
         }
 
         // Display time in top left corner
         GUI.Label(new Rect(10, 10, 0, 0), "Time: " + (timeNow - timeStart), timeStyle);
+
+        // Display run speed
+        GUI.Box(new Rect(Screen.width / 4, 10, 150, 30), "", barBackStyleTwo);
+        GUI.Box(new Rect(Screen.width / 4, 10, 150f * ((float)runSpeed / 100f), 30), "", barBackStyle);
+        GUI.Box(new Rect(Screen.width / 4, 10, 150, 30), "Run Speed", barFrontStyle);
+
+        // Display throw power
+        GUI.Box(new Rect((Screen.width / 4) * 3 - 150, 10, 150, 30), "", barBackStyleTwo);
+        GUI.Box(new Rect((Screen.width / 4) * 3 - 150, 10, 150f * ((float)throwPower / 100f), 30), "", barBackStyle);
+        GUI.Box(new Rect((Screen.width / 4) * 3 - 150, 10, 150, 30), "Throw Power", barFrontStyle);
     }
 
+    // End the event
+    private void EndEvent()
+    {
+        // Set all stats to whatever
+
+
+        // Load 3D level again (over world)
+        SceneManager.LoadScene(1);
+    }
 
     // Read from file and add words to array list structure
     private void ReadFile(string file, ArrayList wordArray)
