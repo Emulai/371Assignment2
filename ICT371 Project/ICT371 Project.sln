@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2015
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICT371 Project.CSharp", "ICT371 Project.CSharp.csproj", "{47EDCF45-59E4-EE0B-4B50-EBAEF9C081F1}"
 EndProject
 Global
