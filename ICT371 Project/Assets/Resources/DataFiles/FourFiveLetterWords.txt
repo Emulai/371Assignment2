@@ -79,7 +79,6 @@ deep
 deny
 desk
 dial
-dick
 diet
 disc
 disk
