@@ -32,10 +32,15 @@ Brief - Altered JavelinThrowScript to display a pause screen between different e
 	hit the 500m/yard mark, minimal for both will throw 1m/yard, and any other combination will land somewhere 
 	in-between. I plan to weigh more on throw power, as it contains longer words to be typed out.
 
-Version - 04 (Final)
-Date 29/05/2017
+Version - 04
+Date - 29/05/2017
 Brief - Completed Javelin Throw Event. Had difficulty using 2D physics with the javelin sprite (whenever it collided with
 	the ground, OnCollisionEnter2D() was not called, although it collided in the test screen). So to get around this,
 	I just changed the transform of the javelin. It doesn't make for a smooth animation that is consistent with 
 	distance thrown, but it works. I also added a player sprite with animation for running down the track, with the
 	camera following. Also added ending screens showing final stats.
+
+Version - 05
+Date - 29/05/2017
+Brief - Made a simple main menu that navigates through different windows such as help and controls. Also started on 3D 
+	world. Currently have a working FPS camera and a menu that can accessed using the Esc key.
