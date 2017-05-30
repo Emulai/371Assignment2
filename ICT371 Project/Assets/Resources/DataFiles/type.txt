@@ -1,0 +1,4 @@
+Welcome to type racer, hit the right keys at the right time to speed your character up.
+Punctuation is key, don't forget to hit capital letters when they APPEAR.
+Each of your enemies has random speed values so they'll keep you on edge.
+Good luck, have fun.
