@@ -15,11 +15,17 @@ public class CharacterController : MonoBehaviour {
     // Camera move speed
     private float speed;
 
+    // Rigid body component
+    private Rigidbody rb;
+
 	// Use this for initialization
 	void Start () 
     {
         // Initialize speed
-        speed = 10.0f;
+        speed = 5.0f;
+
+        // Get rigid body component
+        rb = GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
@@ -32,6 +38,10 @@ public class CharacterController : MonoBehaviour {
         // Keep movement smooth
         moveFB *= Time.deltaTime;
         strafe *= Time.deltaTime;
+
+        // Set angular velocity to 0
+        rb.angularVelocity = Vector3.zero;
+        rb.velocity = Vector3.zero;
 
         // Move camera
         transform.Translate(strafe, 0, moveFB);

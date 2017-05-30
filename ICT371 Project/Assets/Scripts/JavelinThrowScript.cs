@@ -133,7 +133,6 @@ public class JavelinThrowScript : MonoBehaviour {
 	// Update the Javelin Throw event
 	void Update () 
     {
-        Debug.Log(eventState);
         // Check to see if game is paused
         if (!pause)
         {
@@ -378,14 +377,6 @@ public class JavelinThrowScript : MonoBehaviour {
         }
 	}
     
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        Debug.Log("test");
-
-        if (collision.gameObject.tag == "javelin")
-            Debug.Log("fjdnf");
-    }
-
     // Set the different GUI style properties
     private void SetStyleGUI()
     {
