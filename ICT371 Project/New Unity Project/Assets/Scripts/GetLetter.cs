@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class GetLetter : MonoBehaviour {
 	private InputField input;
-	public Text m_word;
+	public GameObject m_manager;
 
 	// Use this for initialization
 	void Start () {
@@ -37,7 +37,7 @@ public class GetLetter : MonoBehaviour {
 	private void Guess(string guess)
 	{
 		if (guess != "") {
-			m_word.GetComponent<DictionaryToScreen> ().CheckLetter (guess [0]);
+			m_manager.GetComponent<DictionaryToScreen> ().CheckLetter (guess [0]);
 		}
 		input.text = "";
 		input.ActivateInputField ();

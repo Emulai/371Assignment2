@@ -14,7 +14,7 @@ public class ThrowHurdles : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Time.time >= m_dt + 5) {
+		if (Time.time >= m_dt + 7) {
 			m_dt = Time.time;
 			Instantiate (hurdle, new Vector3 (m_trans.position.x, m_trans.position.y, 0), Quaternion.identity);
 		}

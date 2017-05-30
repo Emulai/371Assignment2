@@ -12,9 +12,10 @@ public enum Difficulty {Easy = 4, Medium = 5, Hard = 6};
 
 public class DictionaryToScreen : MonoBehaviour {
 
-	private Text m_word;
+	public Text m_word;
 	public Text m_uIGuess;
 	public Text m_life;
+	public Text m_endWords;
 	private int m_guesses;
 	private float m_guessTime;
 	private int m_wordsPassed;
@@ -33,7 +34,7 @@ public class DictionaryToScreen : MonoBehaviour {
 		m_wordsPassed = 0;
 		m_wordIndex = -1;
 		m_lives = 5;
-		m_word = GetComponent<Text> ();
+
 		Load ();
 		FilterWords ();
 		EncryptWord ();
@@ -107,6 +108,7 @@ public class DictionaryToScreen : MonoBehaviour {
 			Debug.Log (words.GetWord());
 			Debug.Log (words.GetGuesses());
 			Debug.Log (words.GetTime());
+			m_endWords.text += words.GetWord () + " | Guesses: " + words.GetGuesses() + " | Time: " + words.GetTime () + "\n";
 		}
 	}
 
@@ -176,6 +178,8 @@ public class DictionaryToScreen : MonoBehaviour {
 			m_wordsPassed++;
 		} else if (m_guesses == 0) {
 			//Loss
+			m_wordList[m_wordIndex].SetGuesses(5 - m_guesses);
+			m_wordList[m_wordIndex].SetTime((Time.time - m_guessTime));
 			show = true;
 			showTime = Time.time;
 			m_lives--;

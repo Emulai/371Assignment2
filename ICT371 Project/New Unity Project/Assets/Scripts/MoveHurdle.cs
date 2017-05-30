@@ -6,6 +6,7 @@ public class MoveHurdle : MonoBehaviour {
 	private Transform m_trans;
 	private Vector3 m_pos;
 	private float m_dt;
+	public float m_speed;
 	// Use this for initialization
 	void Start () {
 		m_trans = this.transform;
@@ -15,10 +16,10 @@ public class MoveHurdle : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		m_pos.x -= 0.25f;
+		m_pos.x -= m_speed;
 		this.transform.position = m_pos;
 
-		if (Time.time > m_dt + 4) {
+		if (Time.time > m_dt + 8) {
 			Destroy (gameObject);
 			Debug.Log ("Destroy");
 			m_dt = Time.time;
