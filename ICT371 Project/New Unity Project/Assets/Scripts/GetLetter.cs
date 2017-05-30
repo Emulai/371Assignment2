@@ -39,8 +39,10 @@ public class GetLetter : MonoBehaviour {
 		if (guess != "") {
 			m_manager.GetComponent<DictionaryToScreen> ().CheckLetter (guess [0]);
 		}
-		input.text = "";
-		input.ActivateInputField ();
-		input.Select ();
+		if (!m_manager.GetComponent<DictionaryToScreen> ().IsEnd ()) {
+			input.text = "";
+			input.ActivateInputField ();
+			input.Select ();
+		}
 	}
 }

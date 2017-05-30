@@ -46,6 +46,7 @@ public class WordScore : ISerializable {
 
 	public string GetWord()
 	{
+		m_word = RenderWord ();
 		return m_word;
 	}
 

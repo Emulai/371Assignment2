@@ -16,6 +16,9 @@ public class DictionaryToScreen : MonoBehaviour {
 	public Text m_uIGuess;
 	public Text m_life;
 	public Text m_endWords;
+	public Canvas m_game;
+	public Canvas m_end;
+	public GameObject m_gameObjects;
 	private int m_guesses;
 	private float m_guessTime;
 	private int m_wordsPassed;
@@ -27,10 +30,14 @@ public class DictionaryToScreen : MonoBehaviour {
 	public Difficulty m_difficulty;
 	private bool show = false;
 	private float showTime = 0.0f;
+	private bool end = false;
 
 	// Use this for initialization
 	void Start () {
 		//m_difficulty == Difficulty.Easy;
+		m_gameObjects.SetActive(true);
+		m_game.enabled = true;
+		m_end.enabled = false;
 		m_wordsPassed = 0;
 		m_wordIndex = -1;
 		m_lives = 5;
@@ -43,7 +50,13 @@ public class DictionaryToScreen : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		ShowWord ();	
+		if (!end)
+			ShowWord ();	
+	}
+
+	public bool IsEnd()
+	{
+		return end;
 	}
 
 	private void ShowWord()
@@ -89,26 +102,38 @@ public class DictionaryToScreen : MonoBehaviour {
 
 	private void Save()
 	{
-		Stream stream = File.Open ("HangScores.has", FileMode.Create);
+		Stream stream = File.Open ("HangScores.has", FileMode.Append);
 		BinaryFormatter bformatter = new BinaryFormatter ();
 		Debug.Log ("Writing Scores");
-		bformatter.Serialize (stream, m_wordList);
+
+		int guesses = 0;
+		float time = 0.0f;
+
+		foreach (WordScore word in m_wordList) {
+			guesses += word.GetGuesses ();
+			time += word.GetTime ();
+		}
+
+		List<Score> scores = new List<Score> ();
+		scores.Add(new Score(m_wordList.Count, guesses, time));
+
+		bformatter.Serialize (stream, scores);
 		stream.Close ();
 	}
 
 	private void Read()
 	{
-		m_wordList = null;
+		List<Score> scores = new List<Score> ();
 		Stream stream = File.Open ("HangScores.has", FileMode.Open);
+
 		BinaryFormatter bformatter = new BinaryFormatter ();
 		Debug.Log ("Reading Scores");
-		m_wordList = (List<WordScore>)bformatter.Deserialize (stream);
+		scores = (List<Score>)bformatter.Deserialize (stream);
 		stream.Close ();
-		foreach (WordScore words in m_wordList) {
-			Debug.Log (words.GetWord());
-			Debug.Log (words.GetGuesses());
-			Debug.Log (words.GetTime());
-			m_endWords.text += words.GetWord () + " | Guesses: " + words.GetGuesses() + " | Time: " + words.GetTime () + "\n";
+		foreach (Score score in scores) {
+			Debug.Log (score.GetWords());
+			Debug.Log (score.GetGuesses ());
+			Debug.Log (score.GetTime ());
 		}
 	}
 
@@ -187,9 +212,15 @@ public class DictionaryToScreen : MonoBehaviour {
 			m_word.text = m_wordList [m_wordIndex].RenderWord ();
 			if (m_lives == 0) {
 				//Save stats and return to main world
-				Save();
+				//Save();
 				//m_difficulty = Difficulty.Easy;
 				//FilterWords();
+				m_game.enabled = false;
+				m_end.enabled = true;
+				m_gameObjects.SetActive (false);
+				end = true;
+				foreach (WordScore words in m_wordList)
+					m_endWords.text += words.GetWord () + " | Guesses: " + words.GetGuesses() + " | Time: " + words.GetTime () + "\n";
 			}
 		}
 	}
