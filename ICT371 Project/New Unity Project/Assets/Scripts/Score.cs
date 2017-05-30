@@ -8,43 +8,26 @@ using UnityEngine;
 
 [Serializable()]
 public class Score {
-	private int m_tWords;
-	private int m_tGuesses;
-	private float m_tTime;
+	List<WordScore> m_wScore = new List<WordScore>();
 
-	public Score(int p_tWords, int p_tGuesses, float p_tTime)
+	public Score(List<WordScore> p_wScore)
 	{
-		m_tWords = p_tWords;
-		m_tGuesses = p_tGuesses;
-		m_tTime = p_tTime;
+		m_wScore = p_wScore;
 	}
 
 	public Score(SerializationInfo info, StreamingContext ctxt)
 	{
-		m_tWords = (int)info.GetValue ("NumberOfWords", typeof(int));
-		m_tGuesses = (int)info.GetValue ("NumberOfGuesses", typeof(int));
-		m_tTime = (float)info.GetValue ("TimeTaken", typeof(float));
+		m_wScore = (List<WordScore>)info.GetValue ("PlayerScore", typeof(List<WordScore>));
 	}
 
 	public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
 	{
-		info.AddValue ("NumberOfWords", m_tWords);
-		info.AddValue ("NumberOfGuesses", m_tGuesses);
-		info.AddValue ("TimeTaken", m_tTime);
+		info.AddValue ("PlayerScore", m_wScore);
 	}
 
-	public int GetWords()
+	public List<WordScore> GetWordScores()
 	{
-		return m_tWords;
+		return m_wScore;
 	}
-
-	public int GetGuesses()
-	{
-		return m_tGuesses;
-	}
-
-	public float GetTime()
-	{
-		return m_tTime;
-	}
+		
 }

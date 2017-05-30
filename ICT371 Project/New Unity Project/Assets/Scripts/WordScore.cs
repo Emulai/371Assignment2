@@ -38,7 +38,6 @@ public class WordScore : ISerializable {
 	public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
 	{
 		m_word = RenderWord ();
-		Debug.Log (m_word);
 		info.AddValue ("NumberOfGuesses", m_guesses);
 		info.AddValue ("TimeToGuess", m_time);
 		info.AddValue ("Word", m_word);
@@ -46,8 +45,13 @@ public class WordScore : ISerializable {
 
 	public string GetWord()
 	{
-		m_word = RenderWord ();
 		return m_word;
+	}
+
+	public string GetTheWord()
+	{
+		string word = RenderWord ();
+		return word;
 	}
 
 	public int GetGuesses()

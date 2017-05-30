@@ -21,7 +21,6 @@ public class MoveHurdle : MonoBehaviour {
 
 		if (Time.time > m_dt + 8) {
 			Destroy (gameObject);
-			Debug.Log ("Destroy");
 			m_dt = Time.time;
 		}
 		
