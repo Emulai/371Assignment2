@@ -81,18 +81,35 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\AI.cs" />
     <Compile Include="Assets\Scripts\CharacterController.cs" />
     <Compile Include="Assets\Scripts\CharacterRotation.cs" />
+    <Compile Include="Assets\Scripts\CollideReact.cs" />
+    <Compile Include="Assets\Scripts\DictionaryToScreen.cs" />
+    <Compile Include="Assets\Scripts\Disguise.cs" />
     <Compile Include="Assets\Scripts\ExitGame.cs" />
+    <Compile Include="Assets\Scripts\GetLetter.cs" />
     <Compile Include="Assets\Scripts\JavelinThrowScript.cs" />
     <Compile Include="Assets\Scripts\LoadSceneOnClick.cs" />
+    <Compile Include="Assets\Scripts\MoveHurdle.cs" />
     <Compile Include="Assets\Scripts\OnCollideSwitch.cs" />
     <Compile Include="Assets\Scripts\OpenMenuOnEsc.cs" />
+    <Compile Include="Assets\Scripts\Player.cs" />
+    <Compile Include="Assets\Scripts\Score.cs" />
     <Compile Include="Assets\Scripts\SelectOnInput.cs" />
+    <Compile Include="Assets\Scripts\SpawnObject.cs" />
+    <Compile Include="Assets\Scripts\TextImporter.cs" />
+    <Compile Include="Assets\Scripts\TextManager.cs" />
+    <Compile Include="Assets\Scripts\ThrowHurdles.cs" />
+    <Compile Include="Assets\Scripts\WordScore.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Dictionary\Dictionary.txt" />
     <None Include="Assets\Resources\DataFiles\FourFiveLetterWords.txt" />
     <None Include="Assets\Resources\DataFiles\SixSevenLetterWords.txt" />
+    <None Include="Assets\Resources\DataFiles\intro.txt" />
+    <None Include="Assets\Resources\DataFiles\level2.txt" />
+    <None Include="Assets\Resources\DataFiles\type.txt" />
     <None Include="Assets\Resources\References.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2012\UnityVS.CSharp.targets" />

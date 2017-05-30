@@ -44,3 +44,11 @@ Version - 05
 Date - 29/05/2017
 Brief - Made a simple main menu that navigates through different windows such as help and controls. Also started on 3D 
 	world. Currently have a working FPS camera and a menu that can accessed using the Esc key.
+
+Version - 06
+Date 30/05/2017
+Brief - Added to the 3D world. Put wooden barricades around to enclose the player in a certain area, with banners in-between
+	at certain sections. By walking through/under these banners, the player starts the event that is on the banner. Upon
+	completion of the event, the user is moved back to the 3D world. Also made a terrain with grass. I plan to add in 
+	race tracks if I get the time. I also added some tents that would be used for shade by the participants (adds to the
+	visual effect).
