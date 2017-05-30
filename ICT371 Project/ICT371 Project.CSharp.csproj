@@ -86,6 +86,7 @@
     <Compile Include="Assets\Scripts\ExitGame.cs" />
     <Compile Include="Assets\Scripts\JavelinThrowScript.cs" />
     <Compile Include="Assets\Scripts\LoadSceneOnClick.cs" />
+    <Compile Include="Assets\Scripts\OnCollideSwitch.cs" />
     <Compile Include="Assets\Scripts\OpenMenuOnEsc.cs" />
     <Compile Include="Assets\Scripts\SelectOnInput.cs" />
   </ItemGroup>
