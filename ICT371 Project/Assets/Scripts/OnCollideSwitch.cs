@@ -15,11 +15,12 @@ public class OnCollideSwitch : MonoBehaviour {
     // Switch scene depending on which banner walked through
     void OnTriggerEnter(Collider other)
     {
+        Debug.Log(this.gameObject.name);
         if(this.gameObject.name == "JavelinBanner")
             SceneManager.LoadScene(2);
-        //if (this.gameObject.name == "100MBanner")
-        //    SceneManager.LoadScene(3);
-        //if (this.gameObject.name == "110MBanner")
-        //    SceneManager.LoadScene(4);
+        if (this.gameObject.name == "SprintBanner")
+            SceneManager.LoadScene(3);
+        if (this.gameObject.name == "HurdlesBanner")
+            SceneManager.LoadScene(4);
     }
 }
