@@ -7,8 +7,11 @@
  * Date - 21/05/2017
  * Version 02 - Added GUIStyle and GUIBox code for displaying current word to screen and changing of font colours
  * 
- * Date 24/05/2017
+ * Date - 24/05/2017
  * Version 03 - Added pause screen between different event states
+ * 
+ * Date - 29/05/2017
+ * Version 04 (Final) - Added camera, player, and javelin transform code seeing as 2D physics wasn't working for me, animation, and ending screen stats
  */
 
 using System.Collections;
@@ -65,6 +68,16 @@ public class JavelinThrowScript : MonoBehaviour {
     private int throwPowerComplete;
     public float distanceTotal;
 
+    // Animator variables
+    private Animator playerAnim;
+
+    // Player and cam variables
+    private GameObject player;
+    private Camera cam;
+
+    // Javelin moving up or down
+    bool movingUp;
+
 	// Initialize Javelin Throw event
 	void Start () 
     {
@@ -103,10 +116,20 @@ public class JavelinThrowScript : MonoBehaviour {
         timeNow = (int)Time.time;
 
         // Initialize pause to true
-        pause = true; ;
+        pause = true;
+
+        // Initialize animator
+        playerAnim = GetComponent<Animator>();
+        playerAnim.enabled = false;
+
+        // Initialize player and cam
+        player = GameObject.FindWithTag("Player");
+        cam = Camera.main;
+
+        // Start with javelin moving up
+        movingUp = true;
 	}
 	
-
 	// Update the Javelin Throw event
 	void Update () 
     {
@@ -124,7 +147,7 @@ public class JavelinThrowScript : MonoBehaviour {
                 if (eventState == "running")
                     eventState = "throwing";
                 else if (eventState == "throwing")
-                    eventState = "finishedOne";
+                    eventState = "animation";
             }
 
             // Running state of the event (4 and 5 letter words)
@@ -241,16 +264,104 @@ public class JavelinThrowScript : MonoBehaviour {
                     }
                 }
             }
-            // Ending screen
-            else
+            // Animation
+            else if (eventState == "animation")
             {
-                // Ending screen animations/information/whatnot
+                // Unpause screen
+                pause = false;
+
+                bool runDone = false;
+
+                // Enable animation and get transforms
+                if (playerAnim.enabled == false)
+                    playerAnim.enabled = true;
+
+                Vector3 temp = player.transform.position;
+                Vector3 temp2 = cam.transform.position;
+                Vector3 temp3 = javelin.transform.position;
+
+                // Update positions
+                temp.x += 0.4f;
+                temp2.x += 0.4f;
+                temp3.x += 0.4f;
+
+                // Run down the track
+                if (temp.x < -1)
+                {
+                    player.transform.position = temp;
+                    cam.transform.position = temp2;
+                    javelin.transform.position = temp3;
+                }
+
+                // Stop player animation when reaching end of track
+                if (temp.x >= -1)
+                {
+                    playerAnim.enabled = false;
+                    runDone = true;
+                }
+
+                // Animate throwing after running has been completed
+                if (runDone)
+                { 
+                    // Get cam and javelin positions
+                    temp2 = cam.transform.position;
+                    temp3 = javelin.transform.position;
+
+                    // Get values for run speed and throw power, weighing more on throw power
+                    float runSpeedDistance = runSpeed * 1.5f;
+                    float throwPowerDistance = throwPower * 3.5f;
+                    distanceTotal = runSpeedDistance + throwPowerDistance;
+
+                    // Determine how fast camera need to move by dividing total distance by 44 (44 frames for javelin to go up and down y-axis)
+                    float moveSpeed = distanceTotal / 44.0f;
+
+                    
+
+                    // Move the javelin and camera
+                    if (movingUp)
+                    {
+                        temp2.x += moveSpeed;
+                        temp3.x += moveSpeed;
+                        temp3.y += 0.5f;
+                    }
+                    else
+                    {
+                        temp2.x += moveSpeed;
+                        temp3.x += moveSpeed;
+                        temp3.y -= 0.5f;
+                    }
+
+                    // Move camera and javelin
+                    cam.transform.position = temp2;
+                    javelin.transform.position = temp3;
+
+                    // Set to moving down after 44 frames (y == 8.5) and rotate javelin
+                    if (temp3.y >= 8.5f)
+                    {
+                        movingUp = false;
+                        javelin.transform.eulerAngles = new Vector3(
+                            javelin.transform.eulerAngles.x,
+                            javelin.transform.eulerAngles.y,
+                            javelin.transform.eulerAngles.z - 90
+                            );
+                    }
+
+                    // Move to ending screen once javelin hits ground (y == -3.5)
+                    if (temp3.y <= -3.5)
+                    {
+                        eventState = "wait";
+                        pause = true;
+                        timeStart = (int)Time.time;
+                    }
+                }
             }
         }
         else if (Input.GetKeyDown(KeyCode.Space))
         {
             // Change ending screen on each press of space bar
-            if (eventState == "finishedOne")
+            if(eventState == "wait")
+                eventState = "finishedOne";
+            else if (eventState == "finishedOne")
                 eventState = "finishedTwo";
             else if (eventState == "finishedTwo")
                 eventState = "finishedThree";
@@ -266,14 +377,6 @@ public class JavelinThrowScript : MonoBehaviour {
         }
 	}
     
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        Debug.Log("test");
-
-        if (collision.gameObject.tag == "javelin")
-            Debug.Log("fjdnf");
-    }
-
     // Set the different GUI style properties
     private void SetStyleGUI()
     {
@@ -327,7 +430,7 @@ public class JavelinThrowScript : MonoBehaviour {
         float tempSize = 0;
         
         // Check to see if screen paused or not
-        if (!pause)
+        if (!pause && eventState != "animation")
         {
             // Display word to be typed to the screen, colouring each letter appropriately
             for (int i = 0; i < currentWord.Length; i++)
@@ -377,7 +480,7 @@ public class JavelinThrowScript : MonoBehaviour {
             }
             else if (eventState == "finishedThree")
             {
-                string temp = "Distance Thrown: " + distanceTotal + "\n\n Space to end event";
+                string temp = "Distance Thrown: " + distanceTotal + " feet \n\n Space to end event";
                 GUI.Box(new Rect(Screen.width / 4, Screen.height * 0.2f, Screen.width / 2, Screen.height * 0.6f), temp, infoStyle);
             }
         }
